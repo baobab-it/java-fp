@@ -51,7 +51,7 @@ public class Performance {
                             primesCount += 1;
                         }
                     }
-                    //System.out.println(primesCount);
+                    System.out.println(primesCount);
                 });
             }
             System.out.println(String.format(format, time / iterations));
@@ -66,7 +66,7 @@ public class Performance {
                     final long primesCount = numbers.stream()
                             .filter(number -> isPrime(number))
                             .count();
-                    //System.out.println(primesCount);
+                    System.out.println(primesCount);
                 });
             }
 
@@ -82,7 +82,7 @@ public class Performance {
                     final long primesCount = numbers.parallelStream()
                             .filter(number -> isPrime(number))
                             .count();
-                    //System.out.println(primesCount);
+                    System.out.println(primesCount);
                 });
             }
 

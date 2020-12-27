@@ -6,7 +6,7 @@
  * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/vsjava8 for more book information.
  ** */
-package fpij;
+package fpij.bring;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;

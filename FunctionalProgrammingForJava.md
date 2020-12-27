@@ -7,7 +7,7 @@
 Припустимо, що нам потрібно вивести список машин:
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/v01/CarScratch.java#10-15
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/v01/CarScratch.java#10-15
 public static void showAll(List<Car> lc) {
     for (Car c : lc) {
         System.out.println(c);
@@ -19,7 +19,7 @@ public static void showAll(List<Car> lc) {
 Припустимо, що нам потрібні тільки червоні машини:
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/CarScratch.java#17-32
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/CarScratch.java#17-32
 /**
  * Функцію потрібно копіювати, наприклад, щоб отримати синій (Blue) колір
  * автомобіля, що є недоцільним.
@@ -41,7 +41,7 @@ public static List<Car> getRedCars(List<Car> in) {
 Проте, замість копіювання методів можна передавати параметр кольору автомобіля:
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/CarScratch.java#34-46
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/CarScratch.java#34-46
 /**
  * Передаємо параметр в метод, та змінюємо в параметрі List на Iterable, для
  * більш широкої підтримки типів колекцій
@@ -64,7 +64,7 @@ public static List<Car> getColoredCars(Iterable<Car> in, String color) {
 Ось додамо пошук машини по рівню використання пального, що відрізняється від попереднього методу одним виразом:
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/CarScratch.java#48-60
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/CarScratch.java#48-60
 /**
  * Це погано постійно копіювати код для зміни інших праметрів пошуку,
  * наприклад, пошук машини, по кількості використання бензину
@@ -113,7 +113,7 @@ getBy____(Iterable<Car> in, <якВибираємо>) {
 Ось приклад сортування по класу `PassengerOrder`:
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/CarScratch.java#81-87
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/CarScratch.java#81-87
 class PassengerCountOrder implements Comparator<Car> {
 
     @Override
@@ -121,7 +121,7 @@ class PassengerCountOrder implements Comparator<Car> {
         return o1.getPassengers().size() - o2.getPassengers().size();
     }
 }
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/CarScratch.java#75-76
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v01/CarScratch.java#75-76
 cars.sort(new PassengerCountOrder());
 showAll(cars); //<- загальний список елементів залишається незмінним
 ```
@@ -149,7 +149,7 @@ class RedCarCriterion implements CarCriterion{
 Створимо інтерфейс та реалізуємо його:
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v02/CarScratch.java#57-85
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v02/CarScratch.java#57-85
 interface CarCriterion {
 
     boolean test(Car c);
@@ -184,7 +184,7 @@ class GasLevelCarCriterion implements CarCriterion {
 Замість кількох методів (`getColoredCars()`, `getCarsByGasLevel()`) своримо один метод, що буде обробляти різні варіанти вибірки:
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v02/CarScratch.java#17-29
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v02/CarScratch.java#17-29
 /**
  * Передаємо інтерфейс в метод для більш гнучкої реалізації вибірки в одному
  * методі (можна перевіряти колір, бензин та інші критерії, реалізувавши інтерфейс CarCriterion
@@ -203,7 +203,7 @@ public static List<Car> getCarsByCriterion(Iterable<Car> in, CarCriterion crit) 
 Застосовуємо реалізації `RedCarCriterion` і `GasLevelCriterion`:
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v02/CarScratch.java#40-41
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v02/CarScratch.java#40-41
 showAll(getCarsByCriterion(cars, new RedCarCriterion()));
 showAll(getCarsByCriterion(cars, new GasLevelCarCriterion(6)));
 ```
@@ -215,7 +215,7 @@ showAll(getCarsByCriterion(cars, new GasLevelCarCriterion(6)));
 Можна організувати внутрішні класи з критеріями з класом моделі, що дозволяє мати безпосередній (превелигійований) доступ до полів класу та тримати все в одному місці. Також треба зазначити, що всі внутрішні класи були зроблені статичними, щоб бути пов'язаними чи згрупованими з класом `Car` (концепція внутрішніх класів, як одного цілого з `Car`).
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v03/Car.java#7-64,73-86
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v03/Car.java#7-64,73-86
 public class Car {
 
     private final int gasLevel;
@@ -294,7 +294,7 @@ public class Car {
 Використання класів у коді:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v03/CarScratch.java#40-41
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v03/CarScratch.java#40-41
 showAll(getCarsByCriterion(cars, new Car.RedCarCriterion()));
 showAll(getCarsByCriterion(cars, new Car.GasLevelCarCriterion(6)));
 ```
@@ -306,7 +306,7 @@ showAll(getCarsByCriterion(cars, new Car.GasLevelCarCriterion(6)));
 #### Статичні поля
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v03/CarScratch.java#66
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v03/CarScratch.java#66
 public static final RedCarCriterion RED_CAR_CRITERION = new RedCarCriterion();
 ```
 
@@ -317,7 +317,7 @@ public static final RedCarCriterion RED_CAR_CRITERION = new RedCarCriterion();
 В наступному прикладі використовується шаблон Одинак, який отримує один і той самий екземпляр класу, який записаний в статичне поле, що економить використання ресурсів системи. Цей варіант має більшу перевагу ніж попередній (статичне поле):
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v03/CarScratch.java#68-70
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v03/CarScratch.java#68-70
 public static RedCarCriterion getRedCarCriterion() {
     return RED_CAR_CRITERION;
 }
@@ -326,7 +326,7 @@ public static RedCarCriterion getRedCarCriterion() {
 Особливість цього підходу, полягає в тому, що ми можемо змінювати реалізацію в методі `getRedCarCriterion()` і не змінювати код при використанні цього методу:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v03/CarScratch.java#43-45
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v03/CarScratch.java#43-45
 // Використання статичного поля і шаблону фабрики
 showAll(getCarsByCriterion(cars, Car.RED_CAR_CRITERION));
 showAll(getCarsByCriterion(cars, Car.getRedCarCriterion()));
@@ -335,7 +335,7 @@ showAll(getCarsByCriterion(cars, Car.getRedCarCriterion()));
 Зробимо невеличкий рефакторинг:
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v04/Car.java#58-70
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v04/Car.java#58-70
 private static class RedCarCriterion implements CarCriterion {
 
     @Override
@@ -356,7 +356,7 @@ public static CarCriterion getRedCarCriterion() { // <- результат да�
 Створимо фабрику для визначення рівня бензину:
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v04/Car.java#72-76
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v04/Car.java#72-76
 public static CarCriterion getGasLevelCarCriterion(int threshold) {
     return new GasLevelCarCriterion(threshold);
 }
@@ -367,7 +367,7 @@ private static class GasLevelCarCriterion implements CarCriterion { // <-заб�
 Використання статичного методу:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v04/CarScratch.java#42
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v04/CarScratch.java#42
 showAll(getCarsByCriterion(cars, Car.getGasLevelCarCriterion(6)));
 ```
 
@@ -398,7 +398,7 @@ Food brownie = new Food() {};
 Також можна спростити реалізацію використовуючи анонімний клас. Ось код, який містить показ повної та спрощеної версії:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v04/Car.java#58-66
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v04/Car.java#58-66
 private static class RedCarCriterion implements CarCriterion {
 
     @Override
@@ -409,7 +409,7 @@ private static class RedCarCriterion implements CarCriterion {
 
 private static final RedCarCriterion RED_CAR_CRITERION = new RedCarCriterion();
 
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v05/Car.java#58-64
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v05/Car.java#58-64
 // СПРОЩЕНА ВЕРСІЯ (використання анонімного класу, який реалізує інтерфейс CarCriterion)
 public static final CarCriterion RED_CAR_CRITERION = new CarCriterion() {
 
@@ -442,7 +442,7 @@ public static final CarCriterion RED_CAR_CRITERION = new CarCriterion() {
 Оскільки ми використовуємо інтерфейс з одним публічним методом, то ми можемо скористатись лямбда:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v06/Car.java#59-61
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v06/Car.java#59-61
 public static final CarCriterion RED_CAR_CRITERION = (Car c) -> {
     return c.color.equals("Red");
 };
@@ -453,7 +453,7 @@ public static final CarCriterion RED_CAR_CRITERION = (Car c) -> {
 Приклад сортування машин по рівню бензину:
 
 ```java
-// file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v06/Car.java#85-98
+// file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v06/Car.java#85-98
 public static Comparator<Car> getGasComparator() {
     return gasComparator;
 }
@@ -471,7 +471,7 @@ private static class CarGasComparator implements Comparator<Car> {
 ```
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v06/CarScratch.java#45-46
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v06/CarScratch.java#45-46
 cars.sort(Car.getGasComparator());
 showAll(cars);
 ```
@@ -487,12 +487,12 @@ private static final Comparator<Car> gasComparator = (o1, o2) -> {
 Також можна ще більше спростити синтаксис:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v07/Car.java#59
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v07/Car.java#59
 public static final CarCriterion RED_CAR_CRITERION = c -> c.color.equals("Red");
 ```
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v07/Car.java#87
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v07/Car.java#87
 private static final Comparator<Car> gasComparator = (o1, o2) -> o1.gasLevel - o2.gasLevel;
 ```
 
@@ -501,7 +501,7 @@ private static final Comparator<Car> gasComparator = (o1, o2) -> o1.gasLevel - o
 Анотація `@FunctionalInterface` допомагає звернути увагу компілятора на даний інтерфейс, що буде використовуватись лямбда, а також перевірити інтерфейс чи має він один абстрактний метод.
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v07/CarScratch.java#59-63
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v07/CarScratch.java#59-63
 @FunctionalInterface
 interface CarCriterion {
 
@@ -523,7 +523,7 @@ interface CarCriterion {
 Додамо приклад виклику лямбда, що повертається з методу функції:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v08/Car.java#65-67
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v08/Car.java#65-67
 public static CarCriterion getFourPassengerCriterion() {
     return c -> c.getPassengers().size() == 4;
 }
@@ -532,7 +532,7 @@ public static CarCriterion getFourPassengerCriterion() {
 Передаємо лямбда як аргумент методу, в останньому прикладі встановлюємо контекст лямбда в круглих скобках:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v08/CarScratch.java#47-51
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v08/CarScratch.java#47-51
 showAll(getCarsByCriterion(cars, c -> c.getPassengers().size() == 2));
 showAll(getCarsByCriterion(cars, Car.getFourPassengerCriterion()));
 // Перевіримо нову машину Car чи вона має червоний колір
@@ -564,7 +564,7 @@ System.out.println(b);
 Також нам потрібно змінити інтерфейс додавши і йому узагальнення:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v09/CarScratch.java#64-68
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v09/CarScratch.java#64-68
 @FunctionalInterface
 interface Criterion<E> {
 
@@ -575,7 +575,7 @@ interface Criterion<E> {
 Ось приклад як можна організувати узагальнення:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v09/CarScratch.java#21-29
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v09/CarScratch.java#21-29
 public static <E> List<E> getByCriterion(Iterable<E> in, Criterion<E> crit) {
     List<E> output = new ArrayList<>();
     for (E c : in) {
@@ -590,7 +590,7 @@ public static <E> List<E> getByCriterion(Iterable<E> in, Criterion<E> crit) {
 Для викоритання інтерфейсу нам потрібно передавати тип даних:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v09/Car.java#65-67
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v09/Car.java#65-67
 public static Criterion<Car> // встановлюємо `<Car>`
                                 getFourPassengerCriterion() {
     return c -> c.getPassengers().size() == 4;
@@ -600,7 +600,7 @@ public static Criterion<Car> // встановлюємо `<Car>`
 Також можна змінити метод `showAll()`:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v09/CarScratch.java#10-15
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v09/CarScratch.java#10-15
 public static <E> void showAll(List<E> lc) {
     for (E c : lc) {
         System.out.println(c);
@@ -616,7 +616,7 @@ public static <E> void showAll(List<E> lc) {
 Ось приклад як можна використовувати узагальнення:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v10/CarScratch.java#45-52
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v10/CarScratch.java#45-52
 // Використання узагальнень
 List<String> colors = Arrays.asList("LightCoral", "pink", "Orange", "Gold", "plum", "Blue", "limeGreen");
 showAll(getByCriterion(colors, str -> str.length() > 4)); // LightCoral, Orange, limeGreen
@@ -635,7 +635,7 @@ showAll(getByCriterion(dates, ld -> ld.isAfter(today)));
 Перепишемо всю фабрику`GasLevelCarCriterion`:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v09/Car.java#69-85
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v09/Car.java#69-85
 public static Criterion<Car> getGasLevelCarCriterion(int threshold) {
     return new GasLevelCarCriterion(threshold);
 }
@@ -663,7 +663,7 @@ public static Criterion<Car> getGasLevelCarCriterion(int threshold) {
         }
     };
 }
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v11/Car.java#69-71
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v11/Car.java#69-71
 // Варіант 2 - максимальне скорочення лямбда
 public static Criterion<Car> getGasLevelCarCriterion(int threshold) {
     return c -> c.gasLevel >= threshold;
@@ -673,7 +673,7 @@ public static Criterion<Car> getGasLevelCarCriterion(int threshold) {
 Перевіряємо код:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v10/CarScratch.java#43
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v10/CarScratch.java#43
 showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(6)));
 ```
 
@@ -682,7 +682,7 @@ showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(6)));
 Змінна, що використовується в замиканні повинна бути `final` чи ефектино `final`, що в функціональному програмуванні дозволяє посилатись на аргумент, але не змінювати його:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v11/Car.java#69
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/functional/v11/Car.java#69
 public static Criterion<Car> getGasLevelCarCriterion(final int threshold) {
 ```
 
@@ -693,7 +693,7 @@ public static Criterion<Car> getGasLevelCarCriterion(final int threshold) {
 Ось варіант як можна порівнювати машини по декільком кольорам:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v12/Car.java#71-74
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v12/Car.java#71-74
 public static Criterion<Car> getColorCriterion(String...colors) {
     Set<String> colorSet = new HashSet<>(Arrays.asList(colors));
     return c -> colorSet.contains(c.color);
@@ -703,7 +703,7 @@ public static Criterion<Car> getColorCriterion(String...colors) {
 Використання:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v12/CarScratch.java#53
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v12/CarScratch.java#53
 showAll(getByCriterion(cars, Car.getColorCriterion("Red", "Black")));
 ```
 
@@ -716,7 +716,7 @@ showAll(getByCriterion(cars, Car.getColorCriterion("Red", "Black")));
 Чи, наприклад, як отримати негативний результат з нашого запиту. Якщо ми передаємо критерії в фабричний метод, яка показує поведінку використовуючи поведінку аргументів як частини цієї поведінки:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v12/CarScratch.java#11-13
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v12/CarScratch.java#11-13
 public static <E> Criterion<E> negate(Criterion<E> crit) {
     return x -> !crit.test(x);
 }
@@ -725,7 +725,7 @@ public static <E> Criterion<E> negate(Criterion<E> crit) {
 Використання:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v12/CarScratch.java#69-72
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v12/CarScratch.java#69-72
 Criterion<Car> level7 = Car.getGasLevelCarCriterion(7);
 showAll(getByCriterion(cars, level7));
 Criterion<Car> notLevel7 = CarScratch.negate(level7);
@@ -735,7 +735,7 @@ showAll(getByCriterion(cars, notLevel7));
 #### Створимо методи `and()` та `or()` для критеріїв пошуку автомобілів
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v12/CarScratch.java#15-21
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v12/CarScratch.java#15-21
 public static <E> Criterion<E> and(Criterion<E> first, Criterion<E> second) {
     return x -> first.test(x) && second.test(x);
 }
@@ -748,7 +748,7 @@ public static <E> Criterion<E> or(Criterion<E> first, Criterion<E> second) {
 Використання:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v13/CarScratch.java#74-83
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v13/CarScratch.java#74-83
 // Criterion AND
 Criterion<Car> isRed = Car.getColorCriterion("Red");
 Criterion<Car> fourPassengers = Car.getFourPassengerCriterion();
@@ -769,7 +769,7 @@ showAll(getByCriterion(cars, blackOrFourPassengers));
 З Java 8, крім абстратних методів та констант, була додана підтримка статичних методів в інтерфейсі. Тому ми створимо новий клас `Criterion` та перенесемо в нього з файлу `CarScratch.java` інтерфейс `Criterion` та методи: `negate()`, `and()` та `or()`, зверніть увагу, що ці методи зазначаються в інтерфейсі без ключового слова `public`:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v14/Criterion.java
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v14/Criterion.java
 
 @FunctionalInterface
 public interface Criterion<E> {
@@ -795,7 +795,7 @@ public interface Criterion<E> {
 Оскільки в класі `CarScratch` вже немає вищевказаних методів, тому потрібно вказати де ці методи знаходяться:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v14/CarScratch.java#57-72
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v14/CarScratch.java#57-72
 Criterion<Car> level7 = Car.getGasLevelCarCriterion(7);
 showAll(getByCriterion(cars, level7));
 Criterion<Car> notLevel7 = Criterion.negate(level7);                            // <-- вказуємо інтерфейс Criterion
@@ -823,7 +823,7 @@ Java 8 підтримує не тільки статичні методи, а т
 Основна проблема використання статичних методів в інтерфейсі заключається в тому, що вони відносяться до всього інтерфейсу і можуть виникнути проблеми з типом даних, який підставляється, ви не можете нормально використовувати прикріплений тип до статичних полів і їх поведінки.
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v15/Criterion.java
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v15/Criterion.java
 @FunctionalInterface
 public interface Criterion<E> {
 
@@ -847,7 +847,7 @@ public interface Criterion<E> {
 Тепер статичні методи використовуються як методи екземпляру, що тепер має більш читаєму структуру їх застосування:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v15/CarScratch.java#57-72
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v15/CarScratch.java#57-72
 Criterion<Car> level7 = Car.getGasLevelCarCriterion(7);
 showAll(getByCriterion(cars, level7));
 Criterion<Car> notLevel7 = level7.negate();                        // <-- метод екзмпляру
@@ -976,7 +976,7 @@ deactivate "Comparator"
 Адаптер `Predicate` передає один параметр, тоді як інтерфейс функції передає два параметри, один з яких вже заздалегіть встановлений.
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v18/CarScratch.java#13-19
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v18/CarScratch.java#13-19
 public static <E> ToIntFunction<E> compareWithThis(E target, Comparator<E> comp) {
     return x -> comp.compare(target, x);
 }
@@ -989,7 +989,7 @@ public static <E> Predicate<E> compareGreater(ToIntFunction<E> comp) {
 Використання:
 
 ```java
-//file:///home/andrii/NetBeansProjects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v18/CarScratch.java#84-90
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v18/CarScratch.java#84-90
 Car bert = Car.withGasColorPassengers(5, "Blue");
 
 ToIntFunction<Car> compareWithBert = compareWithThis(bert, Car.getGasComparator());
@@ -1001,25 +1001,84 @@ showAll(getByCriterion(cars, compareGreater(compareWithBert)));
 
 ## 4. Робота з чистими (pure) функціями
 
-[ВІДЕО 32]
-********************************************************************************
-
 ### 4.1 Концепт чистих (pure) функцій
 
-Числа (`pure`) функція - це функція, що повертає результат тільки по аргументу і результат завжди однаковий при однакових аргументах. Наприклад, регулярні функції (`impure`) можуть повертати результат з баз даних чи i/o, що може відрізнятись результатом рооти.
+Числа (`pure`) функція - це функція, що повертає результат тільки по аргументу і результат завжди однаковий при однакових аргументах. Наприклад, регулярні функції (`impure`) можуть повертати результат з баз даних чи i/o, що може відрізнятись результатом роботи.
+
+Чиста функція має реферанту прозорість (`referential transparentcy`), тобто, якщо:
+
+```
+f(x) -> x + 2
+```
+
+то
+
+```
+f(x) рівне x + 2
+```
+
+Це дійсно тільки для чистих функцій, тому що звичайна функція може представляти різний результат при тих самих аргументах чи мати побічних ефект (`side effect`), коли функція впливає на змінні, які не належать цій функції. Це дозволяє писати більш надійний код, який містить менше помилок, оскільки функція веде себе прогнозовано, а також її легше тестувати та відлагоджувати.
+
+Також функції мають кращу архітектуру і продуктивність. Оскільки функції при однакових аргументах виводять однаковий результат, то результат роботи функції можна кешувати, що при повторному виклику з аналогічними аргументами виводить вже попередньо готовий результат.
+
+Також чисті функції можуть полегшити використання багатопоточності. Оскільки функції не залежать одна від одної, їх можна запускати паралельно.
 
 ### 4.2 Чиста функція на практиці
 
-### 4.3 Планування pipeline фреймворку
+З чистими функціями важко працювати. Як з їх допомогою можна зробити щось робоче і зручне? Можна написати тільки програми командного рядка, які будуть використовувати 100% чистих функцій. Така програма не буде мати ніякого I/O чи доступу до бази даних, що дуже не практично.
+
+Основне рішення - це передача змінної на верхню (`top`) фунцію (одна функція може викликати іншу функцію і т.д.), яка буде передавати дані до нижніх функцій, тобто дані отримані з баз даних чи I/O  будуть передаватись зі звичайних функцій до чистих функцій.
+
+Приклад стандартної схеми виклика функцій:
+
+```
+impurefn()
+   |  ^
+   /  |
+  impurefn2()
+     |  ^
+     /  |
+    База даних
+```
+
+Функціональна схема роботи:
+
+```
+База даних <- impurefn()
+                |
+                /
+                purefn()
+                  |
+                  /
+                  purefn2()
+                    |
+                    /
+                  ...
+```
+
+Ми робимо pipeline ("трубопровід") процесу, де елемент даних крок за кропом проходить всі чисті функції.
+
+```java
+дані ◇◇◇◇ -> pure function -> дані △△△△ -> pure function -> дані XXX
+дані                            нові дані                        нові дані  
+```
+
+### 4.3 Планування pipeline (трубопроводу) фреймворку
+
+З одного боку ми маємо дані, а з іншого - операції, які можна використовувати над даними.
+
+Для їх поєднання нам потрібна спеціальна обгортка, яка дозволить поєднати дані з операціями над даними. Для обгортки ми будемо використовувати клас `SuperIterable`, оскільки він дозволяє створити ефект трубопроводу з операціями над елементами. Можна використовувати `List`, проте він менш ефекивний, оскільки не дозволяє зв'язувати операції в pipeline. Це є стандартний шлях, який адресований саме цій стандартній проблемі.
 
 ```java
 <SuperIterable> ◇◇◇◇ -> pure function -> <SuperIterable> △△△△
 ```
 
+Ми при кожному виклику чистої функції отримуємо об'єкт `SuperIterable` з новими даними.
+
 ### 4.4 Реалізація pipeline фреймворку
 
 ```java
-//file://XXX/v15/SuperIterable.java#10-21,40-47
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v19/SuperIterable.java#10-21,32-40
 public class SuperIterable<E> implements Iterable<E> {
 
     private Iterable<E> self;
@@ -1045,10 +1104,12 @@ public class SuperIterable<E> implements Iterable<E> {
 }
 ```
 
+ВІДЕО 36
+=========================================================================
 Наступний блок реалізує `Predicate<E>`, що дозовляє нам фільтрувати результат:
 
 ```java
-//file://XXX/v15/SuperIterable.java#23-31
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v19/SuperIterable.java#22-30
 public SuperIterable<E> filter(Predicate<E> pred) {
     List<E> results = new ArrayList<>();
     for (E e : self) {
@@ -1182,19 +1243,3 @@ carIter
 
 ### 4.13 Використання `Optional` в car API
 
-
-                                                                                                                                                                                                        <!--MEGA-RECOVERYKEY.txt
-                                                                                                                                                                                                        Io7gP7KAfK1FoHiBaD3Dng-->
-
-                                                                                                                                                                                                        <!--
-                                                                                                                                                                                                        
-                                                                                                                                                                                                        |MAC-адрес | Текущее состояние | Пристрій|
-                                                                                                                                                                                                        |:---------|:------------------|:--------|
-                                                                                                                                                                                                        |1         |84-D6-D0-F2-7B-51  | Fire    |
-                                                                                                                                                                                                        |2         |90-09-17-48-D7-CF  | Nomi    |
-                                                                                                                                                                                                        |3         |14-CC-20-16-0F-CE  | Main PC |
-                                                                                                                                                                                                        |4         |XX-XX-XX-XX-XX-XX  | Netbook |
-                                                                                                                                                                                                        
-                                                                                                                                                                                                        -->
-
-]]

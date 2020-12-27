@@ -6,7 +6,7 @@
  * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/vsjava8 for more book information.
  ** */
-package fpij;
+package fpij.compare;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -23,7 +23,7 @@ public class ListSelectFiles {
                     return name.endsWith(".java");
                 }
             });
-//            System.out.println(files);
+            System.out.println(files);
         }
 
         Files.newDirectoryStream(Paths.get("fpij"), path -> path.toString().endsWith(".java"))
