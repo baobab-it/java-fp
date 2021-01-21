@@ -1056,7 +1056,7 @@ impurefn()
                   ...
 ```
 
-Ми робимо pipeline ("трубопровід") процесу, де елемент даних крок за кропом проходить всі чисті функції.
+Ми робимо pipeline ("трубопровід") процесу, де елемент даних крок за кроком проходить всі чисті функції.
 
 ```java
 дані ◇◇◇◇ -> pure function -> дані △△△△ -> pure function -> дані XXX
@@ -1067,7 +1067,7 @@ impurefn()
 
 З одного боку ми маємо дані, а з іншого - операції, які можна використовувати над даними.
 
-Для їх поєднання нам потрібна спеціальна обгортка, яка дозволить поєднати дані з операціями над даними. Для обгортки ми будемо використовувати клас `SuperIterable`, оскільки він дозволяє створити ефект трубопроводу з операціями над елементами. Можна використовувати `List`, проте він менш ефекивний, оскільки не дозволяє зв'язувати операції в pipeline. Це є стандартний шлях, який адресований саме цій стандартній проблемі.
+Для їх поєднання нам потрібна спеціальна обгортка, яка дозволить поєднати дані з операціями над даними. Для обгортки ми будемо використовувати клас `SuperIterable`, оскільки він дозволяє створити ефект трубопроводу з операціями над елементами. Можна використовувати `List`, проте він менш ефективний, оскільки не дозволяє зв'язувати операції в pipeline. Це є стандартний шлях, який адресований саме цій стандартній проблемі.
 
 ```java
 <SuperIterable> ◇◇◇◇ -> pure function -> <SuperIterable> △△△△
@@ -1077,8 +1077,14 @@ impurefn()
 
 ### 4.4 Реалізація pipeline фреймворку
 
+```
+SuperIterable <|---- Iterable<E>
++ iterator()
++ filter()
+```
+
 ```java
-//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v19/SuperIterable.java#10-21,32-40
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v19/SuperIterable.java#10-21,40-47
 public class SuperIterable<E> implements Iterable<E> {
 
     private Iterable<E> self;
@@ -1104,12 +1110,10 @@ public class SuperIterable<E> implements Iterable<E> {
 }
 ```
 
-ВІДЕО 36
-=========================================================================
 Наступний блок реалізує `Predicate<E>`, що дозовляє нам фільтрувати результат:
 
 ```java
-//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v19/SuperIterable.java#22-30
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v19/SuperIterable.java#30-38
 public SuperIterable<E> filter(Predicate<E> pred) {
     List<E> results = new ArrayList<>();
     for (E e : self) {
@@ -1120,7 +1124,7 @@ public SuperIterable<E> filter(Predicate<E> pred) {
     return new SuperIterable<>(results);
 }
 
-//file://XXX/v15/SuperIterable.java#49-55
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v19/SuperIterable.java#49-55
 // модифікація значень відбуваєтья на копії обгортки масиву,
 // масив strings залишається незмінним
 SuperIterable<String> upperCase = strings.filter(s -> Character.isUpperCase(s.charAt(0)));
@@ -1132,10 +1136,10 @@ for (String s : upperCase) {
 
 ### 4.5 Внутрішня ітерація
 
-Попередній код трохи громоздкий. тому можна використовувати `Consumer` для обробки кожного елементу:
+Ви звернули увагу, що щоразу як нам потрібні дані ми запускаємо цикл `for` для колекції. Це виглядає не дуже добре, тому краще використовувати елегантний спосіб, щоб це спростити. Потрібно використовувати `Consumer` для обробки кожного елементу:
 
 ```java
-//file://XXX/v15/SuperIterable.java#33-38
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v19/SuperIterable.java#23-28
 public void forEvery(Consumer<E> cons) {
 
     for (E e : self) {
@@ -1143,16 +1147,16 @@ public void forEvery(Consumer<E> cons) {
     }
 }
 
-//file://XXX/v15/SuperIterable.java#57-58
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v19/SuperIterable.java#56-58
 // Consumer
 System.out.println("---------------------------");
 upperCase.forEvery(s -> System.out.println(">" + s));
 ```
 
-Окільки в Java є власна реалізація методу `forEvery()` з назвою `forEach()`, тому зробимо рефакторинг всього коду, використовуючи реалізацію з коробки:
+Всі ці рішення вже є вбудованими в Java в інтерфейс `Iterable`. Тому потрібно видалити метод `forEvery()` і замінити на `forEach()`, тому зробимо рефакторинг всього коду, використовуючи реалізацію з коробки:
 
 ```java
-//file://XXX/v16/SuperIterable.java#29-37,43,48
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v20/SuperIterable.java#36,41
 public class SuperIterable<E> implements Iterable<E> {
 
     private Iterable<E> self;
@@ -1186,19 +1190,21 @@ public class SuperIterable<E> implements Iterable<E> {
         // масив strings залишається незмінним
         SuperIterable<String> upperCase = strings.filter(s -> Character.isUpperCase(s.charAt(0)));
         upperCase.forEach(s -> System.out.println(">" + s));
-
     }
 }
 ```
 
 ### 4.6-4.7 Робимо зміни
 
+На даний час `SuperIterable` дозволяє фільтрувати дані і повертати новий `SuperIterable`. Проте крім фільтрації дані повинні змінюватись, тобто з одних даних потрібно створити нові дані того самого типу чи іншого.
+
 ```java
-◇◇◇◇◇ (10 елементів) -> map(Function<E,F>) -> △△△△△ (на виході 10 елментів)
+◇◇◇◇◇ (10 <E> елементів) -> map(Function<E,F>) -> △△△△△ (на виході 10 <F> елментів)
+SuperIterable<E> -> Function<E, F> -> SuperIterable<F>
 ```
 
 ```java
-//file://XXX/v16/SuperIterable.java#23-27
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v21/SuperIterable.java#23-27
 public <F> SuperIterable<F> map(Function<E, F> op) {
     List<F> results = new ArrayList<>();
     self.forEach(e -> results.add(op.apply(e)));
@@ -1209,13 +1215,16 @@ public <F> SuperIterable<F> map(Function<E, F> op) {
 Використовуємо метод `map()` в ланцюжку викликів, також можна побачити, що при наступній ітерації елементи колекції залишились незмінними:
 
 ```java
-//file://XXX/v16/SuperIterable.java#58-70
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v21/SuperIterable.java#51-72
 strings
-        .filter(x -> Character.isUpperCase(x.charAt(0)))
-        .map(x-> x.toUpperCase()) // <-- виклик нашого методу `map()`
-        .forEach(x -> System.out.println(x));
+    .filter(x -> Character.isUpperCase(x.charAt(0)))
+    .map(x-> x.toUpperCase()) // <-- виклик нашого методу `map()`
+    .forEach(x -> System.out.println(x));
 System.out.println("---------------------------------");
+
 strings.forEach(s -> System.out.println(">" + s));
+System.out.println("---------------------------------");
+
 SuperIterable<Car> carIter = new SuperIterable<>(Arrays.asList(
         Car.withGasColorPassengers(6, "Red", "Fred", "Jim", "Sheila"),
         Car.withGasColorPassengers(3, "Octarine", "Rincewind", "Ridcully"),
@@ -1226,12 +1235,42 @@ SuperIterable<Car> carIter = new SuperIterable<>(Arrays.asList(
 
 carIter
         .filter(c -> c.getGasLevel() > 6)
-        .map(c -> c.getPassenger().get(0) + " is driving a " + c.getColor()
-                + " car with lots of fuel")
+        .map(c-> c.getPassengers().get(0) + "is driving a " + c.getColor()
+            + "car with lots of fuel")
         .forEach(c -> System.out.println("> " + c));
 ```
 
+`SuperIterable` дозволяє застосовувати операції, визначаючи "чисту" функцію, до набору даних. `SuperIterable` створює нову копію даних з самої себе, роблячи потрібні структурні модифікації.
+
 ### 4.8 Кодування незмінних типів даних
+
+Проте при використання `SuperIterable` можна ненароком змінити існуючі дані, при створенні нових даних.
+
+```
+Car{fuel=3} -> map(c-> c.addFuel(3)) -> Car{fuel=6}
+Car{fuel=6} <----------------| фактично змінили дані в початковому об'єкті
+Car{fuel=6} ----------> == <------------Car{fuel=6}
+```
+
+Для нормальної роботи нам потрібно дістати дані зі старого об'єкту і на основі них створити новий об'єкт.
+
+```java
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v21/SuperIterable.java#75-80
+carIter
+    .map(c -> Car.withGasColorPassengers(
+        c.getGasLevel() + 4,
+        c.getColor(), 
+        c.getPassengers().toArray(new String[]{})))
+    .forEach(c -> System.out.println("> " + c));
+```
+
+Такий підхід виглядає дуже заплутано, натомість всю цю логіку можна приховати в класі об'єкта, наприклад, в методі `addFuel(int)`, який замість модифікації самого об'єкта буде повертати новий об'єкт з змінненим полем `fuel`.
+
+
+ВІДЕО 39 07:07
+=========================================================================
+
+
 
 ### 4.9 One-to-many зміни Зміни один до багатьох
 
