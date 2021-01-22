@@ -1,4 +1,4 @@
-package functional.v21;
+package functional.v22;
 
 import java.util.Arrays;
 import java.util.Collections;

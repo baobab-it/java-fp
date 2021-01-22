@@ -1,4 +1,4 @@
-package functional.v21;
+package functional.v22;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +18,14 @@ public class SuperIterable<E> implements Iterable<E> {
     @Override
     public Iterator<E> iterator() {
         return self.iterator();
+    }
+
+    public <F> SuperIterable<F> flatMap(Function<E, SuperIterable<F>> op) {
+        List<F> results = new ArrayList<>();
+
+        self.forEach(e -> op.apply(e).forEach(f -> results.add(f)));
+
+        return new SuperIterable<>(results);
     }
 
     public <F> SuperIterable<F> map(Function<E, F> op) {
@@ -83,6 +91,21 @@ public class SuperIterable<E> implements Iterable<E> {
 
         carIter
                 .map(c -> c.addGass(4))
+                .forEach(c -> System.out.println("> " + c));
+
+        System.out.println("---------------------------------");
+
+        carIter
+                .filter(c -> c.getPassengers().size() > 3)
+                .flatMap(c -> new SuperIterable<>(c.getPassengers()))
+                .map(s -> s.toUpperCase())
+                .forEach(c -> System.out.println("> " + c));
+
+        System.out.println("---------------------------------");
+
+        carIter
+                .flatMap(c -> new SuperIterable<>(c.getPassengers())
+                                    .map(p -> p + " is riding in a " + c.getColor() + " car"))
                 .forEach(c -> System.out.println("> " + c));
     }
 }

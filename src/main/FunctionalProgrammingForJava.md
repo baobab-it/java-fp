@@ -1266,19 +1266,137 @@ carIter
 
 Такий підхід виглядає дуже заплутано, натомість всю цю логіку можна приховати в класі об'єкта, наприклад, в методі `addFuel(int)`, який замість модифікації самого об'єкта буде повертати новий об'єкт з змінненим полем `fuel`.
 
+```java
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v21/Car.java#43-49
+public Car addGass(int g) {
+    return Car.withGasColorPassengers(
+        gasLevel + 4,
+        color, 
+        passengers.toArray(new String[]{})
+    );
+}
+```
 
-ВІДЕО 39 07:07
-=========================================================================
-
-
+```java
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v21/SuperIterable.java#84-86
+carIter
+        .map(c -> c.addGass(4))
+        .forEach(c -> System.out.println("> " + c));
+```
 
 ### 4.9 One-to-many зміни Зміни один до багатьох
 
-### 4.10
+Робота з даними вимагає в певних ситуаціях отримати дані з існуючого об'єкту (наприклад, масив чи список всіх пасажирів) чи зробити агрегацію даних, тощо.
 
-### 4.11
+```
+<E>Cars -----------------------> <F> список пасажирів
+Function<E, SuperIterable<F>>
+c -> (SuperIterable<String>) new SuperIterable((List<String>) c.getPassengers())
+```
+
+Такий вид операцій називається `flatMap` (плоске перетворення):
+
+```
+flatMap(Function<E, SuperIterable<F>> f)
+
+self <- для кожного ...
+    (SuperIterable<F>) f.apply(e) <- forEach додає елементи до фінального результату
+```
+
+```java
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v22/SuperIterable.java#23-29
+public <F> SuperIterable<F> flatMap(Function<E, SuperIterable<F>> op) {
+    List<F> results = new ArrayList<>();
+
+    self.forEach(e -> op.apply(e).forEach(f -> results.add(f)));
+
+    return new SuperIterable<>(results);
+}
+```
+Наступний приклад виведе список всіх пасажирів в представлених автомобілях:
+
+```java
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v22/SuperIterable.java#98-102
+carIter
+        .filter(c -> c.getPassengers().size() > 3)
+        .flatMap(c -> new SuperIterable<>(c.getPassengers()))
+        .map(s -> s.toUpperCase())
+        .forEach(c -> System.out.println("> " + c));
+```
+
+Ми беремо `SuperIterable` отримуємо список елементів (`carIter`), ми створюємо новий `SuperIterable` залишаючи частину елементів відфільтрованих предикатом (операція `filter`), ми створюємо новий `SuperIterable` де ми змінюємо індивідуальний вміст кожного елементу, використовуючи перетворення (операція `map`), ми створюємо новий `SuperIterable`, який з одного елементу робить багато (0 і більше) елементів (операція `flatMap`).
+
+При операції `flatMap` встачаються зв'язки між елементами (наприлад, машиною і пасажирами, що в ній знаходяться).
+
+### 4.10 Тримаємо зв'язок між пов'язаними елементами
+
+Нагадаємо, що при нормальній роботі операції `flatMap` втрачаються зв'язки між елементами, проте в деяких випадках нам потрібно знати, наприклад, до якої машини належить пасажир.
+
+```java
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v22/SuperIterable.java#106-109
+carIter
+        .flatMap(c -> new SuperIterable<>(c.getPassengers())
+                            .map(p -> p + " is riding in a " + c.getColor() + " car"))
+        .forEach(c -> System.out.println("> " + c));
+```
+
+### 4.11 Формальні оригінальні огортки
+
+`SuperIterable` використовуються для обгорток в функціональному стилі, проте не в матиматичному. В матиматичному використовуються монади. Монади мають три шматки: обгортання даних в монаду, діставання даних з монади і операція `flatMap` для діставання різних даних. Тобто операція `flatMap` бере монаду, виконує операції над даними, що містить монада і назад повертає монаду з зміненими даними. Існують вбудовані монади в Java 8: це Stream API, який має багато вбудованих методів і реалізований на основі `SuperIterable`. (Stream API буде розглянутий пізніше)
 
 ### 4.12 Інші обгортки
 
+Розглянемо приклад перевірки на `null`:
+
+```java
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v22/NullChecks.java#6-22
+public class NullChecks {
+    
+    public static void main(String[] args) {
+        HashMap<String, Car> owners = new HashMap<>();
+        owners.put("Sheila", Car.withGasColorPassengers(
+            6, "Red", "Fred", "Jim", "Sheila"));
+        owners.put("Librarian", Car.withGasColorPassengers(
+            3, "Octarin", "Rincewind", "Ridcully"));
+        owners.put("Ogg", Car.withGasColorPassengersAndTrunk(
+            9, "Black", "Weatherwax", "Magrat"));
+
+        String owner = "Ogg";
+        Car c = owners.get(owner);
+        List<String> trunkItems = c.getTrunkContents();
+        System.out.println(owner + " has " + trunkItems + " in the car");
+    }
+}
+```
+
+Якщо для прикладу ми вкажемо власника `"Weatherwax"` ми отримаємо `NullPointException`, для цього нам потрібно весь код після `owner` обгорнути в блок `if (c != null) {`, і після `trunkItems` також обгорнути в `if (trunkItems != null) {`, для перевірки всіх виключень `NullPointException`.
+
+Звичайно змість `null` ми можемо поверути порожній `List<String>`, проте можна використовувати функціональні техніки обійти це виключення.
+
+Для цього можна використовувати техніку присутності чи відсутності елементу, який в разі присутності елементу виконує над ним потрібні операції, в іншому випадку при порожньому результаті операції пропускаються.
+
+Для цього можна використовувати клас `java.util.Optional<T>`, цей клас має вже реалізовані методи:
+
+* `Optional<T> filter(Predicate<? super T> predicate)`;
+* `<U> Optional<U> map(Function<? super T, ? extends U> mapper)`;
+* `<U> Optional<U> flatMap(Function<? super T, Optional<U>> mapper)`;
+* `void ifPresent(Consumer<? super T> consumer)` можна використовувати замість `forEach`;
+
+Ось приклад, як можна організувати код без використання блоків `if (obj != null) {`, які можна забути включити в код:
+
+```java
+//file:///~/Projects/Java/Core/FP/FunctionalProgrammingForJava/src/main/java/functional/v22/NullChecks.java#28-33
+Optional<HashMap<String, Car>> ownerOpt = Optional.of(owners);
+ownerOpt
+        .map(m -> m.get(owner))
+        .map(x -> x.getTrunkContents())
+        .map(x -> owner + " has " + x + "in the car")
+        .ifPresent(m -> System.out.println(m));
+```
+
 ### 4.13 Використання `Optional` в car API
+
+ВІДЕО 44 01:27 copy new version of  code
+=========================================================================
+
 
